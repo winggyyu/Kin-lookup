@@ -19,7 +19,8 @@
   <input type="date" id="date">
   <button onclick="lookupKin()">查詢</button>
   <div id="result"></div>  <script>
-    const baseDate = new Date(Date.UTC(1900, 0, 1));  // KIN 53
+    const baseDate = new Date(Date.UTC(1900, 0, 1));  // 1900/01/01 = KIN 53
+    const baseKin = 53;
 
     const colors = ["紅", "白", "藍", "黃"];
     const glyphs = [
@@ -33,10 +34,20 @@
       "共鳴的", "銀河的", "太陽的", "行星的", "光譜的", "水晶的", "宇宙的"
     ];
 
-    function daysBetweenUTC(date1, date2) {
-      const utc1 = Date.UTC(date1.getUTCFullYear(), date1.getUTCMonth(), date1.getUTCDate());
-      const utc2 = Date.UTC(date2.getUTCFullYear(), date2.getUTCMonth(), date2.getUTCDate());
-      return Math.floor((utc2 - utc1) / (1000 * 60 * 60 * 24));
+    // 過濾閏年中的 2/29，建立不包含閏日的天數差
+    function daysWithoutLeap(from, to) {
+      let days = 0;
+      let d = new Date(from);
+      while (d < to) {
+        const m = d.getUTCMonth();
+        const dt = d.getUTCDate();
+        // 忽略 2/29
+        if (!(m === 1 && dt === 29)) {
+          days++;
+        }
+        d.setUTCDate(d.getUTCDate() + 1);
+      }
+      return days;
     }
 
     function lookupKin() {
@@ -49,9 +60,9 @@
       }
 
       const targetDate = new Date(dateInput + "T00:00:00Z");
-      const daysPassed = daysBetweenUTC(baseDate, targetDate);
+      const daysPassed = daysWithoutLeap(baseDate, targetDate);
+      const kinNumber = ((daysPassed + (baseKin - 1)) % 260 + 260) % 260 + 1;
 
-      const kinNumber = ((daysPassed + 52) % 260 + 260) % 260 + 1;
       const toneIndex = (kinNumber - 1) % 13;
       const glyphIndex = (kinNumber - 1) % 20;
       const color = colors[glyphIndex % 4];
