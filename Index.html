@@ -1,0 +1,49 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>KIN 查詢工具</title>
+  <style>
+    body { font-family: sans-serif; padding: 2rem; background: #f7f7f7; color: #333; }
+    label, input, button { font-size: 1.2rem; }
+    input { padding: 0.4rem; margin-right: 0.5rem; }
+    button { padding: 0.4rem 1rem; }
+    #result { margin-top: 1rem; font-weight: bold; font-size: 1.2rem; }
+  </style>
+</head>
+<body>
+  <h1>KIN 查詢工具</h1>
+  <label for="date">請輸入日期（YYYY-MM-DD）：</label>
+  <input type="date" id="date">
+  <button onclick="lookupKin()">查詢</button>
+  <div id="result"></div>  <script>
+    const baseDate = new Date("1986-02-25");
+    const baseKin = 38;
+    const colors = ["red", "white", "blue", "yellow"];
+    const glyphs = [
+      "Dragon", "Wind", "Night", "Seed", "Serpent",
+      "Worldbridger", "Hand", "Star", "Moon", "Dog",
+      "Monkey", "Human", "Skywalker", "Wizard", "Eagle",
+      "Warrior", "Earth", "Mirror", "Storm", "Sun"
+    ];
+
+    function lookupKin() {
+      const dateInput = document.getElementById("date").value;
+      const result = document.getElementById("result");
+
+      if (!dateInput) {
+        result.textContent = "請先輸入日期。";
+        return;
+      }
+
+      const targetDate = new Date(dateInput);
+      const daysPassed = Math.floor((targetDate - baseDate) / (1000 * 60 * 60 * 24));
+      const kinNum = ((baseKin + daysPassed - 1) % 260 + 260) % 260 + 1;  // 保證為 1~260
+      const tone = ((kinNum - 1) % 13) + 1;
+      const glyphIndex = (kinNum - 1) % 20;
+      const color = colors[glyphIndex % 4];
+      const name = `${color.charAt(0).toUpperCase() + color.slice(1)} Tone ${tone} ${glyphs[glyphIndex]}`;
+
+      result.textContent = `${dateInput} → KIN ${kinNum}: ${name}`;
+    }
+  </script></body>
+</html>
