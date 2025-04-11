@@ -16,8 +16,9 @@
   <input type="date" id="date">
   <button onclick="lookupKin()">查詢</button>
   <div id="result"></div>  <script>
-    const baseDate = new Date("1986-02-25");
-    const baseKin = 38;
+    const baseDate = new Date("1900-01-01");  // KIN 53 基準點
+    const baseKin = 53;
+
     const colors = ["red", "white", "blue", "yellow"];
     const glyphs = [
       "Dragon", "Wind", "Night", "Seed", "Serpent",
@@ -36,14 +37,17 @@
       }
 
       const targetDate = new Date(dateInput);
-      const daysPassed = Math.floor((targetDate - baseDate) / (1000 * 60 * 60 * 24));
-      const kinNum = ((baseKin + daysPassed - 1) % 260 + 260) % 260 + 1;  // 保證為 1~260
-      const tone = ((kinNum - 1) % 13) + 1;
-      const glyphIndex = (kinNum - 1) % 20;
+      const msPerDay = 1000 * 60 * 60 * 24;
+      const daysPassed = Math.floor((targetDate - baseDate) / msPerDay);
+
+      // KIN 計算（1900/1/1 = KIN 53 → 編號為 52）
+      const kinNumber = ((daysPassed + 52) % 260 + 260) % 260 + 1;
+      const tone = ((kinNumber - 1) % 13) + 1;
+      const glyphIndex = (kinNumber - 1) % 20;
       const color = colors[glyphIndex % 4];
       const name = `${color.charAt(0).toUpperCase() + color.slice(1)} Tone ${tone} ${glyphs[glyphIndex]}`;
 
-      result.textContent = `${dateInput} → KIN ${kinNum}: ${name}`;
+      result.textContent = `${dateInput} → KIN ${kinNumber}: ${name}`;
     }
   </script></body>
 </html>
