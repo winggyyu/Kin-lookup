@@ -19,7 +19,7 @@
   <input type="date" id="date">
   <button onclick="lookupKin()">查詢</button>
   <div id="result"></div>  <script>
-    const baseDate = new Date(Date.UTC(1900, 0, 1));  // 使用 UTC，1900/1/1 = KIN 53
+    const baseDate = new Date(Date.UTC(1900, 0, 1));  // KIN 53
 
     const colors = ["紅", "白", "藍", "黃"];
     const glyphs = [
@@ -33,6 +33,12 @@
       "共鳴的", "銀河的", "太陽的", "行星的", "光譜的", "水晶的", "宇宙的"
     ];
 
+    function daysBetweenUTC(date1, date2) {
+      const utc1 = Date.UTC(date1.getUTCFullYear(), date1.getUTCMonth(), date1.getUTCDate());
+      const utc2 = Date.UTC(date2.getUTCFullYear(), date2.getUTCMonth(), date2.getUTCDate());
+      return Math.floor((utc2 - utc1) / (1000 * 60 * 60 * 24));
+    }
+
     function lookupKin() {
       const dateInput = document.getElementById("date").value;
       const result = document.getElementById("result");
@@ -43,8 +49,7 @@
       }
 
       const targetDate = new Date(dateInput + "T00:00:00Z");
-      const msPerDay = 1000 * 60 * 60 * 24;
-      const daysPassed = Math.floor((targetDate - baseDate) / msPerDay);
+      const daysPassed = daysBetweenUTC(baseDate, targetDate);
 
       const kinNumber = ((daysPassed + 52) % 260 + 260) % 260 + 1;
       const toneIndex = (kinNumber - 1) % 13;
