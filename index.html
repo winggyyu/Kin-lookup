@@ -16,7 +16,7 @@
   <input type="date" id="date">
   <button onclick="lookupKin()">查詢</button>
   <div id="result"></div>  <script>
-    const baseDate = new Date("1900-01-01");  // KIN 53 基準點
+    const baseDate = new Date(Date.UTC(1900, 0, 1));  // 使用 UTC，1900/1/1 = KIN 53
     const baseKin = 53;
 
     const colors = ["red", "white", "blue", "yellow"];
@@ -36,11 +36,11 @@
         return;
       }
 
-      const targetDate = new Date(dateInput);
+      // 修正時區誤差：以 UTC 處理日期差
+      const targetDate = new Date(dateInput + "T00:00:00Z");
       const msPerDay = 1000 * 60 * 60 * 24;
       const daysPassed = Math.floor((targetDate - baseDate) / msPerDay);
 
-      // KIN 計算（1900/1/1 = KIN 53 → 編號為 52）
       const kinNumber = ((daysPassed + 52) % 260 + 260) % 260 + 1;
       const tone = ((kinNumber - 1) % 13) + 1;
       const glyphIndex = (kinNumber - 1) % 20;
