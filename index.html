@@ -11,8 +11,8 @@
     button { padding: 0.4rem 1rem; }
     #result { margin-top: 1rem; font-weight: bold; font-size: 1.2rem; }
     .icons { margin-top: 1rem; display: flex; flex-direction: row; align-items: center; gap: 1rem; }
-    .tone-glyph { display: flex; flex-direction: column; align-items: center; }
-    .tone-symbol { font-size: 1.8rem; line-height: 1.0; text-align: center; white-space: pre-line; }
+    .tone-glyph { display: flex; flex-direction: column; align-items: center; line-height: 1; }
+    .tone-symbol { font-size: 1.8rem; text-align: center; white-space: pre-line; line-height: 1; }
     .icons img { width: 80px; height: 80px; background: transparent; }
   </style>
 </head>
@@ -56,10 +56,10 @@
     function getToneSymbol(toneIndex) {
       const tone = toneIndex + 1;
       if (tone <= 4) return "•".repeat(tone);
-      if (tone === 5) return "__";
-      if (tone <= 9) return "•".repeat(tone - 5) + "\n__";
-      if (tone === 10) return "__\n__";
-      if (tone <= 13) return "•".repeat(tone - 10) + "\n__\n__";
+      if (tone === 5) return "━";
+      if (tone <= 9) return "•".repeat(tone - 5) + "\n━";
+      if (tone === 10) return "━\n━";
+      if (tone <= 13) return "•".repeat(tone - 10) + "\n━\n━";
       return "";
     }
 
