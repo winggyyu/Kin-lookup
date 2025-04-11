@@ -1,9 +1,11 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html><html lang="zh">
 <head>
   <meta charset="UTF-8">
-  <title>KIN 查詢工具</title>
+  <title>Crystal Mirrors 38 - KIN 查詢工具</title>
   <style>
     body { font-family: sans-serif; padding: 2rem; background: #f7f7f7; color: #333; }
+    h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+    h2 { font-size: 1.4rem; margin-bottom: 1.5rem; color: #666; }
     label, input, button { font-size: 1.2rem; }
     input { padding: 0.4rem; margin-right: 0.5rem; }
     button { padding: 0.4rem 1rem; }
@@ -11,20 +13,24 @@
   </style>
 </head>
 <body>
-  <h1>KIN 查詢工具</h1>
+  <h1>Crystal Mirrors 38</h1>
+  <h2>銀河印記查詢工具</h2>
   <label for="date">請輸入日期（YYYY-MM-DD）：</label>
   <input type="date" id="date">
   <button onclick="lookupKin()">查詢</button>
   <div id="result"></div>  <script>
     const baseDate = new Date(Date.UTC(1900, 0, 1));  // 使用 UTC，1900/1/1 = KIN 53
-    const baseKin = 53;
 
-    const colors = ["red", "white", "blue", "yellow"];
+    const colors = ["紅", "白", "藍", "黃"];
     const glyphs = [
-      "Dragon", "Wind", "Night", "Seed", "Serpent",
-      "Worldbridger", "Hand", "Star", "Moon", "Dog",
-      "Monkey", "Human", "Skywalker", "Wizard", "Eagle",
-      "Warrior", "Earth", "Mirror", "Storm", "Sun"
+      "龍", "風", "夜", "種子", "蛇",
+      "世界橋", "手", "星星", "月", "狗",
+      "猴", "人", "天行者", "巫師", "鷹",
+      "戰士", "地球", "鏡", "風暴", "太陽"
+    ];
+    const tones = [
+      "磁性的", "月亮的", "電力的", "自我存在的", "超頻的", "韻律的",
+      "共鳴的", "銀河的", "太陽的", "行星的", "光譜的", "水晶的", "宇宙的"
     ];
 
     function lookupKin() {
@@ -36,18 +42,17 @@
         return;
       }
 
-      // 修正時區誤差：以 UTC 處理日期差
       const targetDate = new Date(dateInput + "T00:00:00Z");
       const msPerDay = 1000 * 60 * 60 * 24;
       const daysPassed = Math.floor((targetDate - baseDate) / msPerDay);
 
       const kinNumber = ((daysPassed + 52) % 260 + 260) % 260 + 1;
-      const tone = ((kinNumber - 1) % 13) + 1;
+      const toneIndex = (kinNumber - 1) % 13;
       const glyphIndex = (kinNumber - 1) % 20;
       const color = colors[glyphIndex % 4];
-      const name = `${color.charAt(0).toUpperCase() + color.slice(1)} Tone ${tone} ${glyphs[glyphIndex]}`;
+      const name = `${tones[toneIndex]}${color}${glyphs[glyphIndex]}`;
 
-      result.textContent = `${dateInput} → KIN ${kinNumber}: ${name}`;
+      result.textContent = `${dateInput} → KIN ${kinNumber}：${name}`;
     }
   </script></body>
 </html>
